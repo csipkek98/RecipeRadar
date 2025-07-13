@@ -3,8 +3,6 @@ name: Java Maven Build & Publish Artifact
 on:
   [workflow_dispatch]
 
-  runs-on: ubuntu-latest
-
 jobs:
   build_job:
     runs-on: ubuntu-latest
