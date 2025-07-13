@@ -1,5 +1,8 @@
 package com.cskrisztian.reciperadar.DTO;
 
+
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -61,5 +64,23 @@ public class MealDTO {
     private String strCreativeCommonsConfirmed;
     private String dateModified;
 
-    // Getters and setters
+    public void setIngredientsAndMeasures(List<IngredientMeasureDTO> mealEntityingredientMeasures) {
+        for (int i = 0; i < mealEntityingredientMeasures.size(); i++) {
+            if(mealEntityingredientMeasures.get(i).getIngredient() == null){
+                continue; // Skip if ingredient is null
+            }
+            // Set Ingredient and Measure dynamically
+            try {
+
+                MealDTO.class.getMethod("setStrIngredient" + (i + 1), String.class)
+                    .invoke(this, mealEntityingredientMeasures.get(i).getIngredient());
+                MealDTO.class.getMethod("setStrMeasure" + (i + 1), String.class)
+                    .invoke(this, mealEntityingredientMeasures.get(i).getMeasure());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
 }

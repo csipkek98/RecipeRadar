@@ -61,7 +61,7 @@ public class MealMapper {
         List<IngredientMeasureDTO> ingredientMeasureDTOS = meal.getIngredients().stream()
                 .map(ing -> new IngredientMeasureDTO(ing.getName(), ing.getMeasure()))
                 .collect(Collectors.toList());
-        dto.setIngredientsAndMeasuers(ingredientMeasureDTOS);
+        dto.setIngredientsAndMeasures(ingredientMeasureDTOS);
 
         // Handle tags
         String strTags = meal.getTags().stream()
