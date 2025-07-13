@@ -6,9 +6,9 @@ import com.cskrisztian.reciperadar.DTO.MealsWrapperDTO;
 import com.cskrisztian.reciperadar.DTO.CategoriesDTO;
 import com.cskrisztian.reciperadar.DTO.CategoriesWrapperDTO;
 import com.cskrisztian.reciperadar.DTO.IngredientMeasureDTO;
-import com.cskrisztian.reciperadar.Entities.Categories;
+import com.cskrisztian.reciperadar.Entities.Categorie;
 import com.cskrisztian.reciperadar.Entities.Ingredient;
-import com.cskrisztian.reciperadar.Entities.Meals;
+import com.cskrisztian.reciperadar.Entities.Meal;
 import com.cskrisztian.reciperadar.Repositories.CategoryRepository;
 import com.cskrisztian.reciperadar.Repositories.MealRepository;
 import com.cskrisztian.reciperadar.Utils.CategoryMapper;
@@ -39,7 +39,7 @@ public class RecipeService {
 
         for (MealDTO mealDTO : mealsWrapper.getMeals()) {
             System.out.println("Processing meal: " + mealDTO.getIdMeal());
-            Meals meal = MealMapper.toEntity(mealDTO);  // Convert DTO to Entity
+            Meal meal = MealMapper.toEntity(mealDTO);  // Convert DTO to Entity
 
             // Extract and add ingredients to meal
             List<IngredientMeasureDTO> ingredientMeasureDTOS = extractIngredientsFromDTO(mealDTO);
@@ -53,7 +53,7 @@ public class RecipeService {
             System.out.println("Saving meal: " + meal.getName() + " with ID: " + meal.getId());
 
             try {
-                Optional<Meals> MealInDB = mealRepository.findById(meal.getId());
+                Optional<Meal> MealInDB = mealRepository.findById(meal.getId());
                 if(MealInDB != null && MealInDB.get().getCategory() != null) {
                     System.out.println("Full Meal data already exists in DB with same category, skipping save: " + meal.getName());
                     continue; // Skip saving if meal already exists with same category
@@ -89,7 +89,7 @@ public class RecipeService {
     public void saveRecipe(MealDTO mealDTO) {
         // Meal meal = new Meal();
         // meal.setName()
-        Meals meal = MealMapper.toEntity(mealDTO);  // Convert DTO to Entity
+        Meal meal = MealMapper.toEntity(mealDTO);  // Convert DTO to Entity
         System.out.println("Saving recipe: " + meal.getName());
         try {
             mealRepository.save(meal);
@@ -101,7 +101,7 @@ public class RecipeService {
 
     public void saveCategory(CategoriesDTO categoriesDTO) {
         // Implement saving logic for categories if needed
-        Categories category = CategoryMapper.toEntity(categoriesDTO); // Assuming you have a CategoriesMapper similar to MealMapper
+        Categorie category = CategoryMapper.toEntity(categoriesDTO); // Assuming you have a CategoriesMapper similar to MealMapper
         System.out.println("Saving category: " + categoriesDTO.getStrCategory());
         categoryRepository.save(category);
 
@@ -118,4 +118,55 @@ public class RecipeService {
             saveCategory(categoriesDTO);
         }
     }
+
+    public MealDTO findById(String id) {
+        System.out.println("Finding meal by ID: " + id);
+        Optional<Meal> mealOptional = mealRepository.findById(Long.parseLong(id));
+        if (mealOptional.isPresent()) {
+            Meal meal = mealOptional.get();
+            return MealMapper.toDTO(meal); // Convert Entity to DTO
+        } else {
+            System.out.println("Meal not found with ID: " + id);
+            return null; // or throw an exception
+        }
+    }
+
+    public MealsWrapperDTO getAllMeals(){
+        System.out.println("Retrieving all meals from the database.");
+        return convertIterableToMealWrapperDTO(mealRepository.findAll());
+    }
+
+    private MealsWrapperDTO convertIterableToMealWrapperDTO(Iterable<Meal> mealIterable) {
+        System.out.println("Converting Iterable<Meal> to MealsWrapperDTO.");
+        MealsWrapperDTO mealsWrapper = new MealsWrapperDTO();
+        List<MealDTO> mealDTOs = new ArrayList<>();
+        for (Meal meal : mealIterable) {
+            MealDTO mealDTO = MealMapper.toDTO(meal); // Convert Entity to DTO
+            mealDTOs.add(mealDTO);
+        }
+        mealsWrapper.setMeals(mealDTOs);
+        System.out.println("Retrieved " + mealDTOs.size() + " meals from the database.");
+        return mealsWrapper;
+    }
+
+    public CategoriesWrapperDTO getAllCategories(){
+        categoryRepository.findAll();
+        return convertIterableToCategoryWrapperDTO(categoryRepository.findAll());
+
+    }
+
+    private CategoriesWrapperDTO convertIterableToCategoryWrapperDTO(Iterable<Categorie> all) {
+        System.out.println("Converting Iterable<Categorie> to CategoriesWrapperDTO.");
+        CategoriesWrapperDTO categoriesWrapper = new CategoriesWrapperDTO();
+        List<CategoriesDTO> categoriesDTOs = new ArrayList<>();
+        for (Categorie categorie : all) {
+            CategoriesDTO categoriesDTO = CategoryMapper.toDTO(categorie); // Convert Entity to DTO
+            categoriesDTOs.add(categoriesDTO);
+        }
+        categoriesWrapper.setCategories(categoriesDTOs);
+        System.out.println("Converted " + categoriesDTOs.size() + " categories to CategoriesWrapperDTO.");
+        return categoriesWrapper;
+    }
+
+
 }
