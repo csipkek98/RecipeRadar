@@ -7,7 +7,8 @@ import java.util.*;
 
 @Entity
 @Data
-public class Meals {
+@Table(name = "meals")
+public class Meal {
 
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)
