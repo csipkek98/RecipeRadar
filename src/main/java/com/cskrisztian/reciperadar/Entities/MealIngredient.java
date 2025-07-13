@@ -20,7 +20,7 @@ public class MealIngredient {
 
     @ManyToOne
     @JoinColumn(name = "meal_id", referencedColumnName = "meal_id")
-    private Meals meal;
+    private Meal meal;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")

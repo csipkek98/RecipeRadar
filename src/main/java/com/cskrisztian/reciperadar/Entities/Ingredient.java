@@ -23,7 +23,7 @@ public class Ingredient {
 
     @ManyToOne
     @JoinColumn(name = "meal_id")
-    private Meals meal;
+    private Meal meal;
 
     // Getters and setters
 }
