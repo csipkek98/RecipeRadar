@@ -12,5 +12,6 @@ jobs:
     - name: build image
       run: docker build ./api/ -t csipkek98/reciperadar:latest
     - name: push image to Docker Hub
-      run: docker push csipkek98/reciperadar:latest
+      run: |
+        docker push csipkek98/reciperadar:latest
     
