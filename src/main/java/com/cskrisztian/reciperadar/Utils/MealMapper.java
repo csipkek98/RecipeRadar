@@ -6,15 +6,16 @@ import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Collections;
 
+import com.cskrisztian.reciperadar.DTO.IngredientMeasureDTO;
 import com.cskrisztian.reciperadar.DTO.MealDTO;
 import com.cskrisztian.reciperadar.Entities.Ingredient;
-import com.cskrisztian.reciperadar.Entities.Meals;
+import com.cskrisztian.reciperadar.Entities.Meal;
 import com.cskrisztian.reciperadar.Entities.Tag;
 
 public class MealMapper {
 
-     public static Meals toEntity(MealDTO dto) {
-        Meals meal = new Meals();
+     public static Meal toEntity(MealDTO dto) {
+        Meal meal = new Meal();
 
         meal.setId(Long.parseLong(dto.getIdMeal()));
         meal.setName(dto.getStrMeal());
@@ -40,7 +41,38 @@ public class MealMapper {
         return meal;
     }
 
-    private static List<Ingredient> extractIngredients(MealDTO dto, Meals meal) {
+    public static MealDTO toDTO(Meal meal) {
+        MealDTO dto = new MealDTO();
+
+        dto.setIdMeal(String.valueOf(meal.getId()));
+        dto.setStrMeal(meal.getName());
+        dto.setStrMealAlternate(meal.getAlternateName());
+        dto.setStrCategory(meal.getCategory());
+        dto.setStrArea(meal.getArea());
+        dto.setStrInstructions(meal.getInstructions());
+        dto.setStrMealThumb(meal.getStrMealThumb());
+        dto.setStrYoutube(meal.getYoutubeUrl());
+        dto.setStrSource(meal.getSourceUrl());
+        dto.setStrImageSource(meal.getImageSource());
+        dto.setStrCreativeCommonsConfirmed(meal.getCreativeCommonsConfirmed());
+        dto.setDateModified(meal.getDateModified());
+
+        // Handle ingredients
+        List<IngredientMeasureDTO> ingredientMeasureDTOS = meal.getIngredients().stream()
+                .map(ing -> new IngredientMeasureDTO(ing.getName(), ing.getMeasure()))
+                .collect(Collectors.toList());
+        dto.setIngredientsAndMeasuers(ingredientMeasureDTOS);
+
+        // Handle tags
+        String strTags = meal.getTags().stream()
+                .map(Tag::getName)
+                .collect(Collectors.joining(","));
+        dto.setStrTags(strTags);
+
+        return dto;
+    }
+
+    private static List<Ingredient> extractIngredients(MealDTO dto, Meal meal) {
         List<Ingredient> ingredients = new ArrayList<>();
 
         for (int i = 1; i <= 20; i++) {
@@ -65,7 +97,7 @@ public class MealMapper {
         return ingredients;
     }
 
-    private static List<Tag> extractTags(String strTags, Meals meal) {
+    private static List<Tag> extractTags(String strTags, Meal meal) {
         if (strTags == null || strTags.isBlank()) {
             return Collections.emptyList();
         }
