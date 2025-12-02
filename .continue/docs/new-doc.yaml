@@ -1,0 +1,14 @@
+name: Spring Boot Documentation
+description: Documentation for Spring Boot, a framework for building Java applications.
+    tags: [spring, boot, java]
+    icon: https://spring.io/images/spring-logo.png
+    homepage: https://spring.io/projects/spring-boot
+version: 0.0.1
+schema: v1
+docs:
+  - name: Spring docs
+    description: Documentation for Spring Boot
+    startUrl: https://docs.spring.io/spring-boot/documentation.html
+    tags: [spring, boot, java]
+    icon: https://spring.io/images/spring-logo.png
+    homepage: https://spring.io/projects/spring-boot
