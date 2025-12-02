@@ -2,13 +2,13 @@
 # FROM mcr.microsoft.com/devcontainers/base:debian
 FROM openjdk:21-jdk-slim
 
-ARG DB_URL
-ARG DB_USERNAME
-ARG DB_PASSWORD
+# ARG DB_URL
+# ARG DB_USERNAME
+# ARG DB_PASSWORD
 
-ENV spring.datasource.url=$DB_URL
-ENV spring.datasource.username=$DB_USERNAME
-ENV spring.datasource.password=$DB_PASSWORD
+# ENV spring.datasource.url=$DB_URL
+# ENV spring.datasource.username=$DB_USERNAME
+# ENV spring.datasource.password=$DB_PASSWORD
 
 RUN apt-get update && apt-get install -y curl unzip zip
 

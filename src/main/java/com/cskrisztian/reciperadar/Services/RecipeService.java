@@ -53,8 +53,8 @@ public class RecipeService {
             System.out.println("Saving meal: " + meal.getName() + " with ID: " + meal.getId());
 
             try {
-                Optional<Meal> MealInDB = mealRepository.findById(meal.getId());
-                if(MealInDB != null && MealInDB.get().getCategory() != null) {
+                Optional<Meal> mealInDB = mealRepository.findById(meal.getId());
+                if(mealInDB.isPresent() && mealInDB.get().getCategory() != null) {
                     System.out.println("Full Meal data already exists in DB with same category, skipping save: " + meal.getName());
                     continue; // Skip saving if meal already exists with same category
                 }
@@ -132,7 +132,7 @@ public class RecipeService {
     }
 
     public MealsWrapperDTO getAllMeals(){
-        System.out.println("Retrieving all meals from the database.");
+        System.out.println("Retrieving all meals from the database...");
         return convertIterableToMealWrapperDTO(mealRepository.findAll());
     }
 
