@@ -1,6 +1,6 @@
 # # Use an official OpenJDK runtime as a parent image
 # FROM mcr.microsoft.com/devcontainers/base:debian
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk
 
 # ARG DB_URL
 # ARG DB_USERNAME
